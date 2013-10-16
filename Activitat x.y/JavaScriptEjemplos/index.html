@@ -1,0 +1,636 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css1.css">
+    </head>
+    <body>
+        <div>
+            
+            <table style="border: 1px solid;">
+                <thead style="background-color: blue; color:white">
+                    <tr>
+                        <th>
+                            Conceptos
+                        </th>
+                        <th>
+                            Código
+                        </th>
+                        <th>
+                            Resultado
+                        </th>
+                    </tr>
+                                       
+                </thead>
+                <tbody>
+
+
+                    <tr>
+                        <td>
+                            <pre>Variables <br>jS Data Types</pre>    
+
+                        </td>
+                        <td>
+                            <pre>
+                            &lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;script&gt;
+var x=5;
+var y=6;
+var z =x+y; //Ahora es un número
+
+
+
+
+document.write("Suma1: var1: " + x + " +  var2: " + y + " = " + z +"&lt;br&gt;");
+
+z = ""+x+y; //Ahora es un String
+
+document.write("Concat: var1: " + x + " +  var2: " + y + " = " +z+"&lt;br&gt;"); //Concatena los numeros
+
+z = true; //ASe convierte en booleano
+document.write("z = " +z +"&lt;br&gt;"); 
+
+z=[x,y,(x+y)];//Es una array
+document.write("Suma2: var1: " + z[0] + " +  var2: " + z[1]+ " = " + z[2] +"&lt;br&gt;");
+
+z=new Object();  //Es nu objeto con propiedades
+z.x=x;
+z.y=y;
+z.z=z.y+z.x;
+
+document.write("Suma3: var1: " + z.x + " +  var2: " + z.y + " = " + z.z +"&lt;br&gt;");
+
+
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+                        </td>
+                        <td>
+                            <pre>
+Suma1: var1: 5 + var2: 6 = 11
+Concat: var1: 5 + var2: 6 = 56
+z = true
+Suma2: var1: 5 + var2: 6 = 11
+Suma3: var1: 5 + var2: 6 = 11
+
+                            </pre>
+ 
+                        </td>
+                    </tr>
+
+
+                    
+                    
+                    
+                    <tr>
+                        <td>
+                            <pre>
+Funcion
+Comparisons
+
+                            </pre> 
+                        </td>
+                        <td>
+                            <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;h1&gt;My First Web Page&lt;/h1&gt;
+
+&lt;p id="demo"&gt;Escribe tu edat&lt;/p&gt;
+
+&lt;script&gt;
+
+function pontexto() //Funcion para obtener el valor del textbox y trabar con ello
+{
+
+
+var textBox = document.getElementById('TEXTBOX_ID');
+var edad= textBox.value;
+
+if (!isNaN(edad)){  //comprueba que sea un número
+if(edad &gt;=18){ //comprueba si el numero es mayor o igual a 18
+document.getElementById("demo").innerHTML="Eres mayor de edad";
+}
+else{ 
+document.getElementById("demo").innerHTML="Eres menor de edad";
+}
+}
+else{
+document.getElementById("demo").innerHTML="Ha de ser un número";
+}
+textBox.value ="";
+}
+
+&lt;/script&gt;
+
+
+&lt;input type="text" id="TEXTBOX_ID"&gt;
+
+&lt;button onclick="pontexto()"&gt;Aceptar&lt;/button&gt;
+&lt;/body&gt;
+&lt;/html&gt;&lt;/html&gt; 
+
+                            </pre>                            
+                        </td>
+                        <td>
+                            <pre>
+Eres menor de edad
+Eres mayor de edad
+Ha de ser un número
+
+                            </pre>                            
+                        </td>
+                    </tr>
+
+
+                    
+                    
+                    
+                    <tr>
+                        <td>
+                            <pre>
+Operators
+                            </pre>                            
+                        </td>
+                        <td>
+                            <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;h1&gt;Calcularoda&lt;/h1&gt;
+
+&lt;p id="demo"&gt;Calcularoda&lt;/p&gt;
+
+&lt;script&gt;
+
+
+
+
+function Suma()
+{
+var x= parseFloat(document.getElementById('val1').value);  //Obtiene el valor del textbos
+var y= document.getElementById('val2'); //Otra forma es creando una variable para obtener el elemento, 
+var yval= parseFloat(y.value);          //Luego tra variable para obtener el valor
+document.getElementById("demo").innerHTML=x+yval;
+}
+
+function Resta()
+{
+var x= document.getElementById('val1');
+var xval= parseFloat(x.value);
+var y= document.getElementById('val2');
+var yval= parseFloat(y.value);
+document.getElementById("demo").innerHTML=xval-yval;
+}
+
+function Multi()
+{
+var x= document.getElementById('val1');
+var xval= parseFloat(x.value);
+var y= document.getElementById('val2');
+var yval= parseFloat(y.value);
+document.getElementById("demo").innerHTML=xval*yval;
+}
+
+function Divi()
+{
+var x= document.getElementById('val1');
+var xval= parseFloat(x.value);
+var y= document.getElementById('val2');
+var yval= parseFloat(y.value);
+document.getElementById("demo").innerHTML=xval/yval;
+}
+
+
+
+document.getElementById("demo").innerHTML="Calcularoda";
+
+
+
+
+&lt;/script&gt;
+
+&lt;input type="text" id="val1"&gt;
+&lt;input type="text" id="val2"&gt;
+&lt;button onclick="Suma()"&gt;Suma&lt;/button&gt;
+&lt;button onclick="Resta()"&gt;Resta&lt;/button&gt;
+&lt;button onclick="Multi()"&gt;Multiplicación&lt;/button&gt;
+&lt;button onclick="Divi()"&gt;División&lt;/button&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+                            </pre>                            
+                        </td>
+                        <td>
+                            <script>
+
+
+
+
+function Suma()
+{
+var x= document.getElementById('val1');
+var xval= parseFloat(x.value);
+var y= document.getElementById('val2');
+var yval= parseFloat(y.value);
+document.getElementById("demo").innerHTML=xval+yval;
+}
+
+function Resta()
+{
+var x= document.getElementById('val1');
+var xval= parseFloat(x.value);
+var y= document.getElementById('val2');
+var yval= parseFloat(y.value);
+document.getElementById("demo").innerHTML=xval-yval;
+}
+
+function Multi()
+{
+var x= document.getElementById('val1');
+var xval= parseFloat(x.value);
+var y= document.getElementById('val2');
+var yval= parseFloat(y.value);
+document.getElementById("demo").innerHTML=xval*yval;
+}
+
+function Divi()
+{
+var x= document.getElementById('val1');
+var xval= parseFloat(x.value);
+var y= document.getElementById('val2');
+var yval= parseFloat(y.value);
+document.getElementById("demo").innerHTML=xval/yval;
+}
+
+
+
+document.getElementById("demo").innerHTML="Calcularoda";
+
+
+
+
+</script>
+
+
+<p id="demo">Calcularoda</p>
+
+<input type="text" id="val1">
+<input type="text" id="val2">
+<button onclick="Suma()">Suma</button>
+<button onclick="Resta()">Resta</button>
+<button onclick="Multi()">Multiplicación</button>
+<button onclick="Divi()">División</button>
+                           <!-- <pre>
+Los resultados de :
+X+Y
+X-Y
+X/Y
+X*Y
+
+                            </pre>     -->                       
+                        </td>
+                    </tr>
+
+
+                    
+                    
+                    <tr>
+                        <td>
+                            <pre>
+Objetos
+Loop While
+Conditions
+
+                            </pre>                            
+                        </td>
+                        <td>
+                            <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;script&gt;  
+var pTotal = 0; 
+
+function DaCarta(){ 
+  var num= Math.floor((Math.random()*12)+1);
+  var x=document.getElementById("demo");
+ 
+partida.Pjugador +=num;
+
+ if(partida.Pjugador &gt;21){
+   alert('Has Perdido. Ha salido el ' + num + ", Total: " + partida.Pjugador);
+ }
+else if(partida.Pjugador == 21){
+alert('Has Ganado');
+}
+ else{
+
+
+   x.innerHTML="Numero: " + num  +" total: "+ partida.Pjugador ;
+ }
+
+}
+
+function Plantarse(){
+
+var pCasa = Math.floor((Math.random()*12)+1);
+while ((pCasa&lt;17) && (pCasa &lt;partida.Pjugador)) //entra en un bucle mientras la maquina tenga menos
+  {                                                   // de 17 puntos y tenga menos puntos que el jugador  
+pCasa +=Math.floor((Math.random()*12)+1);
+}
+
+
+
+if (pCasa ==21){
+alert('Has Perdido.Numero de la casa: 21');
+}
+else if(pCasa &gt; 21){
+alert('Has ganado. La casa se ha pasado : ' + pCasa); 
+}
+else if(pCasa &lt; partida.Pjugador){
+alert('Has ganado.Tu : ' + partida.Pjugador +' La casa: ' + pCasa); 
+}
+
+else if (pCasa &gt; partida.Pjugador){
+alert('Has perdido.Tu : ' + partida.Pjugador +' La casa: ' + pCasa); 
+}
+
+else{
+alert('Empate');
+}
+
+
+partida.Pcasa=pCasa;
+
+
+}
+
+function nuevaPartida(){
+partida.Pcasa=0;
+partida.Pjugador=0;
+pTotal = 0;
+  var x=document.getElementById("demo");
+   x.innerHTML="Numero: " + 0  +" total: "+ partida.Pjugador ;
+}
+
+var partida=new Object();   //Crear un objeto con propiedades y metodos
+partida.Pcasa=0; //puntos de la maquina
+partida.Pjugador=0; //puntos del jugador
+partida.nuevacarta = DaCarta; //Otro valor para llegar a 21
+partida.plantar = Plantarse; 
+partida.nueva= nuevaPartida;   //Resetea los valores
+
+&lt;/script&gt;
+
+&lt;p id="demtitulo"&gt;Llega a 21&lt;/p&gt;
+&lt;p id="demo"&gt;Número:0&lt;/p&gt;
+
+&lt;button onclick="partida.nuevacarta()"&gt;Carta&lt;/button&gt; <!--en el onclick se llama a los metodos del objeto -->
+&lt;button onclick="partida.plantar()"&gt;Plantarse&lt;/button&gt;
+&lt;button onclick="partida.nueva()"&gt;Nueva Partida&lt;/button&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+                            </pre>                            
+                        </td>
+                        <td>
+                            
+           <script>  
+var pTotal = 0; 
+
+function DaCarta(){
+  var num= Math.floor((Math.random()*12)+1);
+  var x=document.getElementById("demoCarta");
+ 
+partida.Pjugador +=num;
+
+ if(partida.Pjugador >21){
+   alert('Has Perdido. Ha salido el ' + num + ", Total: " + partida.Pjugador);
+ }
+else if(partida.Pjugador == 21){
+alert('Has Ganado');
+}
+ else{
+
+
+   x.innerHTML="Numero: " + num  +" total: "+ partida.Pjugador ;
+ }
+
+}
+
+function Plantarse(){
+
+var pCasa = Math.floor((Math.random()*12)+1);
+while ((pCasa<17) && (pCasa <partida.Pjugador))
+  {
+pCasa +=Math.floor((Math.random()*12)+1);
+}
+
+
+
+if (pCasa ==21){
+alert('Has Perdido.Numero de la casa: 21');
+}
+else if(pCasa > 21){
+alert('Has ganado. La casa se ha pasado : ' + pCasa); 
+}
+else if(pCasa < partida.Pjugador){
+alert('Has ganado.Tu : ' + partida.Pjugador +' La casa: ' + pCasa); 
+}
+
+else if (pCasa > partida.Pjugador){
+alert('Has perdido.Tu : ' + partida.Pjugador +' La casa: ' + pCasa); 
+}
+
+else{
+alert('Empate');
+}
+
+
+partida.Pcasa=pCasa;
+
+
+}
+
+function nuevaPartida(){
+partida.Pcasa=0;
+partida.Pjugador=0;
+pTotal = 0;
+  var x=document.getElementById("demoCarta");
+   x.innerHTML="Numero: " + 0  +" total: "+ partida.Pjugador ;
+}
+
+var partida=new Object();
+partida.Pcasa=0;
+partida.Pjugador=0;
+partida.nuevacarta = DaCarta;
+partida.plantar = Plantarse;
+partida.nueva= nuevaPartida;
+
+</script>
+
+<p id="demtitulo">Llega a 21</p>
+<p id="demoCarta">Número:0</p>
+
+<button onclick="partida.nuevacarta()">Carta</button>
+<button onclick="partida.plantar()">Plantarse</button>
+<button onclick="partida.nueva()">Nueva Partida</button>
+                            
+                           <!-- <pre>
+Por poner.....
+                            </pre>     -->
+                        </td>
+                    </tr>
+
+
+                    
+                    
+                    <tr>
+                        <td>
+                            <pre>
+switch
+                            </pre> 
+                        </td>
+                        <td>
+                            <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;p&gt;Clica para comprobar tu suerte.&lt;/p&gt;
+
+&lt;button onclick="myFunction()"&gt;Try it&lt;/button&gt;
+
+&lt;p id="demo"&gt;&lt;/p&gt;
+
+&lt;script&gt;
+function myFunction()
+{
+var x;
+var d= Math.floor((Math.random()*10)+1);
+switch (d)
+  {
+  
+  case 4:
+    x="Mala suerte.No arriesgues.";
+    break;
+  case 2:
+    x="Poca suerte.Evita dejar cosas al azar.";
+    break;
+  case 3:
+    x="Suerte. Puedes ganar algún premio de loteria.";
+    break;
+  case 4:
+    x="Bastante suerte.Haz la quinela.";
+    break;
+  case 5:
+    x="Mucha suerte.Hou pasarán cosas buenas.";
+    break;
+  case 6:
+    x="Máxima suerte.Invierte en bolsa.";
+    break;
+  default:
+    x="Muy mala suerte.Mejor no salgas de casa";
+  }
+document.getElementById("demo").innerHTML=x;
+}
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+                            </pre> 
+                            
+                        </td>
+                        <td>
+                            <pre>
+Puede salir:
+Mala suerte.No arriesgues
+Poca suerte.Evita dejar cosas al azar.
+Suerte. Puedes ganar algún premio de loteria.
+Bastante suerte.Haz la quinela.
+Mucha suerte.Hou pasarán cosas buenas
+Máxima suerte.Invierte en bolsa.
+Muy mala suerte.Mejor no salgas de casa
+
+                            </pre> 
+                            
+                        </td>
+                    </tr>
+
+                    
+                    
+                    
+
+                    <tr>
+                        <td>
+                            <pre>
+For
+                            </pre> 
+                        </td>
+                        <td>
+                            <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;script&gt;
+
+for (var i=0;i&lt;=10;i++)
+{
+for (var a=i;a&lt;=10-i;a++){
+document.write("*");
+}
+document.write("&lt;br&gt;");
+}
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+                            </pre> 
+                            
+                        </td>
+                        <td>
+                            <pre>
+***********
+*********
+*******
+*****
+***
+*
+
+                            </pre> 
+                            
+                        </td>
+                    </tr>
+
+
+                </tbody>     
+                
+            </table>
+            
+            
+            
+        </div>
+        
+        
+    </body>
+</html>
