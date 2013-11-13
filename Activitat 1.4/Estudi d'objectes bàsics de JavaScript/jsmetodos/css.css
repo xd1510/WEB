@@ -1,0 +1,45 @@
+/* 
+    Document   : css
+    Created on : 08-nov-2013, 9:30:06
+    Author     : cep
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+*{
+    text-align: center; 
+    margin: 20px;
+    background-color: white;
+    color: black;
+}
+h1{
+    color:red;
+}
+#tot{
+    width: 1200px;
+  
+}
+
+#iz{
+       
+    float: left;
+    margin-left: 350px;
+}
+#der{
+    float: left;
+}
+#val1{
+    height: 30px;
+}
+#val2{
+    height: 30px;
+}
+#res2{
+    clear:both;
+}
+#error{
+    color: red;
+}

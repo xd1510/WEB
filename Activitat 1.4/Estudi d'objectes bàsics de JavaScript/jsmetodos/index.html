@@ -1,0 +1,141 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link type="text/css" rel="stylesheet" href="dist/css/bootstrap.min.css"/>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script type="text/javascript" src="dist/js/bootstrap.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="css.css"/>
+    </head>
+    <body>
+        <div id="tot">
+            <h1>Criptod</h1>
+            <div id="iz">
+                <p> Encriptar</p>
+                <input type="text" id="val1" size="20">
+                <button onclick="encriptar()" class="btn btn-info">Encriptar</button>         
+                <!--  <img src="images/encript.jpg" name="pic" onclick="encriptar()" height="40"/>-->
+            </div>
+            <div id="der">
+                <p>Desencriptar</p>
+                <input type="text" id="val2" size="20">
+                <button onclick="desencriptar()" class="btn btn-info">Desencriptar</button>
+            </div>
+            <br>
+            <p id="res2"></p>
+            <p id="error"></p>
+            <button onclick="copia()" class="btn btn-info">Copialo!</button>         
+        </div>
+        <script>
+            var copialo="";
+            var lado = false;
+            function encriptar(){
+                copialo="";
+                var clave = new Array();
+                var cadena= document.getElementById('val1').value;  //Obtiene el valor 
+                document.getElementById('val1').value="";
+                 document.getElementById('val2').value=""; 
+                document.getElementById("res2").innerHTML= '';
+                document.getElementById('error').innerHTML="";
+                var d = new Date;
+                var mes = d.getMonth() + 1;
+                var encriptado="";
+                
+                for(var i= 0;i<cadena.length;i++){
+                    var letra="";                   
+                    var ascii = cadena.toString().charAt(i).charCodeAt(0);
+                    var parametro = Math.pow(mes,2);                    
+                    letra = ascii+ parametro;
+                    letra = letra.toString();//Uso el toString de Number
+                    encriptado+=String.fromCharCode(letra) + "#"; 
+                 
+                }
+                
+                encriptado+=mes;
+                clave=[cadena,encriptado];
+                document.getElementById("res2").innerHTML= "La clave (Cadena/encriptación) es ["+clave.join('/')+"]";
+                copialo=encriptado;
+                lado =false;
+              
+              
+                /*
+                var boton=document.createElement("input");
+                boton.setAttribute('type','button');
+                boton.setAttribute('id','enc');
+                boton.setAttribute('value','Copialo!');
+                boton.setAttribute('onclick', 'copia()');
+                document.getElementById('tot').appendChild(boton);
+                 */
+                
+            }
+            
+            function desencriptar(){
+                copialo="";
+                var d = new Date;
+                var mes = d.getMonth() + 1;
+                document.getElementById("res2").innerHTML= '';
+                document.getElementById('error').innerHTML="";
+                var clave = new Array();
+                var encriptado=   document.getElementById('val2').value; 
+                document.getElementById('val2').value=""; 
+                
+                var esplit = encriptado.split('#');//Separo cada letra separada por #  en un vector
+               
+                var param = esplit[esplit.length-1];//obtengo el mes de la clave
+                
+                var bol = new Boolean();
+                bol= param==mes; //compara los 2 meses si son el mismo desencripta
+               // alert(bol);
+                if(bol){
+                    console.log(param);
+                    var cadena ="";
+                    for(var s in esplit){
+                        
+                        if(s<=esplit.length-2){
+                            var ascii2 = esplit[s].charCodeAt(0);
+                            var parametro2 = Math.pow(param,2);
+                           
+                            ascii2 = ascii2-parametro2;
+                            cadena+= String.fromCharCode(ascii2);
+                            
+                        }
+                    }
+            
+                    clave=[cadena,encriptado];
+                    
+                    document.getElementById("res2").innerHTML= "La clave (Cadena/encriptación) es ["+clave.join('/')+"]";    
+                    copialo=cadena;
+                    
+                    /*  var boton=document.createElement("input");
+                    boton.setAttribute('type','button');
+                    boton.setAttribute('id','enc');
+                    boton.setAttribute('value','Copialo!');
+                    boton.setAttribute('onclick', 'copia()');
+                    document.getElementById('tot').appendChild(boton);
+                     */
+                    lado=true;
+                }
+                else{
+                 
+                    document.getElementById('error').innerHTML = 'El mes no corresponde con el del código';
+                }
+                
+            }
+            
+            function copia(){ 
+             if(!lado){
+                 document.getElementById('val2').value=copialo; 
+             }
+             
+               
+            } 
+             
+
+        </script>
+    </body>
+</html>
