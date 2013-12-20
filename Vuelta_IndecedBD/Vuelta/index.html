@@ -1,0 +1,698 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Juego de simulacion</title>
+        <link type="text/css" rel="stylesheet" href="dist/css/bootstrap.css"/>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script type="text/javascript" src="dist/js/bootstrap.min.js"></script>
+        <script>
+              
+            
+            var VelocidadesGuardados= new Array;//Array general donde se guardan los datos
+            const tamanybici=4;//4 es % que ocupa la bici
+              
+            //prefixes of implementation that we want to test
+            window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+ 
+            //prefixes of window.IDB objects
+            window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+            window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange
+ 
+            if (!window.indexedDB) {
+                window.alert("Your browser doesn't support a stable version of IndexedDB.")
+            }
+            
+            
+            //ABRE BASE DE DATOS
+            var db;
+            var request = window.indexedDB.open("VueltaStorage", 1);
+ 
+            request.onerror = function(event) {
+                console.log("error: ");
+            };
+ 
+            request.onsuccess = function(event) {
+                db = request.result;
+                console.log("success: "+ db);
+                comprueba(db);
+            };
+ 
+            
+            
+            //CREA UN OBJECT STORE E INSERTA
+            request.onupgradeneeded = function(event) {
+            
+                var db = event.target.result;
+                var objectStore = db.createObjectStore("MetrosMaximosPorTurno", {keyPath: "id"});
+                
+            }
+            
+            function comprueba(db){//Comprueba si eciste el id99,sino lo crea.(Se existe significa que la partida esta empezada)
+              
+                var transaction99 = db.transaction(["MetrosMaximosPorTurno"]);
+                var objectStore99 = transaction99.objectStore("MetrosMaximosPorTurno");
+                var request99 = objectStore99.get(99);
+             
+                request99.onerror = function(event) {
+                    alert("Unable to retrieve daa from database!");
+                };
+                request99.onsuccess = function(event) {
+                    //console.log('3');
+                    // Do something with the request.result!
+                    //console.log(request99.result);
+                    if(request99.result) {
+                        //    alert("Cargando la partida "+request99.result.id);
+                        cargaPartida();
+                    } else {
+                        //   alert("nueva partida");  
+                        
+                    }
+                };
+            }
+             
+            
+            /*
+            //RECOJE DATOS
+            function read() {
+                var transaction = db.transaction(["MetrosMaximosPorTurno"]);
+                var objectStore = transaction.objectStore("MetrosMaximosPorTurno");
+                var request = objectStore.get(23);
+                request.onerror = function(event) {
+                    alert("Unable to retrieve daa from database!");
+                };
+                request.onsuccess = function(event) {
+                    // Do something with the request.result!
+                    console.log(request.result);
+                    if(request.result) {
+                        //  alert("Name:sx " + request.result.vel);
+                    } else {
+                        alert("Kenny couldn't be found in your database!:D");  
+                    }
+                };
+            }
+            
+            //rECOJE TODOS LOS DATOS
+            function readAll() {
+                var objectStore = db.transaction("MetrosMaximosPorTurno").objectStore("MetrosMaximosPorTurno");
+  
+                objectStore.openCursor().onsuccess = function(event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        //  alert("Name for id " + cursor.key + " is " + cursor.value.name + ", Age: " + cursor.value.age + ", Email: " + cursor.value.email);
+                        cursor.continue();
+                    }
+                    else {
+                        alert("No more entries!");
+                    }
+                };  
+            }
+             */
+            //iNSERTA DE FORMA MANUAL
+            function add() {
+                eliminar();//Primero elimino los datos y luego los inserta de nuevo actualizados
+                for(var a in VelocidadesGuardados){
+                     
+                    var request = db.transaction(["MetrosMaximosPorTurno"], "readwrite")
+                    .objectStore("MetrosMaximosPorTurno")
+                    .add(VelocidadesGuardados[a]);
+               
+                                 
+                    request.onsuccess = function(event) {
+                        //  alert("Kenny has been added to your database.");
+                    };
+         
+                    request.onerror = function(event) {
+                        // alert("Unable to add data\r\nKenny is aready exist in your database! ");        
+                    }
+           
+                }
+               
+         
+            }
+        
+            function eliminar() {//Elimina todos los datos de los ciclistas
+             
+                for(var a in VelocidadesGuardados){
+            
+                    var request = db.transaction(["MetrosMaximosPorTurno"], "readwrite")
+                    .objectStore("MetrosMaximosPorTurno")
+                    .delete(VelocidadesGuardados[a].id);
+                }
+              
+            }
+           
+            
+                
+            function eliminarAll() {//elimina los ciclistas y el id99
+                //console.log('deletesss___!');
+                
+                for(var a in VelocidadesGuardados){
+                    var request = db.transaction(["MetrosMaximosPorTurno"], "readwrite")
+                    .objectStore("MetrosMaximosPorTurno")
+                    .delete(VelocidadesGuardados[a].id);
+                }
+                //console.log('deletesss___!2');
+                request = db.transaction(["MetrosMaximosPorTurno"], "readwrite")
+                .objectStore("MetrosMaximosPorTurno")
+                .delete(99);
+                        
+                               
+                request.onsuccess = function(event) {
+                    //  alert("iid99 sa eliminao");
+                };
+         
+                request.onerror = function(event) {
+                    alert("Unable to add data\r\nKenny is aready exist in your database! ");        
+                }
+                   
+            }
+                
+                
+            function eliminarId(a) {//Elimina un unico id que pasa por parametro
+                
+                var request = db.transaction(["MetrosMaximosPorTurno"], "readwrite")
+                .objectStore("MetrosMaximosPorTurno")
+                .delete(VelocidadesGuardados[a].id);
+            
+            }
+            
+            function ActualizaPosicion(a){
+                eliminarId(a);
+            
+                //Guarda el valor real del %, sin la suma previa del tamaño de la bici para que acabe al llegar
+                //a la meta y no al pasar entero
+                VelocidadesGuardados[a].tamany= parseFloat(VelocidadesGuardados[a].tamany)-tamanybici ;
+                var request = db.transaction(["MetrosMaximosPorTurno"], "readwrite")
+                .objectStore("MetrosMaximosPorTurno")
+                .add(VelocidadesGuardados[a]);
+                VelocidadesGuardados[a].tamany= parseFloat(VelocidadesGuardados[a].tamany)+tamanybici ;
+                    
+               
+                                 
+                request.onsuccess = function(event) {
+                    //console.log("actualizado id:");
+                    var zzz=parseFloat(VelocidadesGuardados[a].tamany)-tamanybici;
+                    //console.log("actualizado id: "+VelocidadesGuardados[a].id + " - posicion: " + zzz);
+                };
+         
+                request.onerror = function(event) {
+                    //    alert("Unable to add data\r\nKenny is aready exist in your database! ");  
+                    console.log("no va yeahh!!");
+                }
+            }
+
+           
+            function empezar(){
+                $(".lblerror").css("display", "none");
+                if(comprobar()){
+                
+                    var request = db.transaction(["MetrosMaximosPorTurno"], "readwrite")
+                    .objectStore("MetrosMaximosPorTurno")
+                    .add({"id":99});
+                
+                    VelocidadesGuardados = [//Inicializo la array general con un id,vel y tamany(es la posicion actual)
+                        {"id": 11, "vel": $('#txtjefe_1').val(), "tamany": tamanybici},
+                        {"id": 12, "vel": $('#txtgre1_1').val(), "tamany": tamanybici},
+                        {"id": 13, "vel": $('#txtgre2_1').val(), "tamany": tamanybici},
+                        {"id": 21, "vel": $('#txtjefe_2').val(), "tamany": tamanybici},
+                        {"id": 22, "vel": $('#txtgre1_2').val(), "tamany": tamanybici},
+                        {"id": 23, "vel": $('#txtgre2_2').val(), "tamany": tamanybici},        
+                    ]  
+                    
+                    
+                    add();  
+                    mueveBicis();
+                
+                
+                    $("#datos").css("display", "none");
+                    $("#carrera").css("display", "inline-block");
+                }
+                else{
+                    
+                }
+            }
+            
+          
+            
+            function PasarTurno(){
+               //  document.getElementById('pasaturno').disabled = true;
+                mueveBicis();
+            }
+            
+            function comprobar(){
+                var esvalido=true;
+                
+                if(isNaN(parseInt($('#txtjefe_1').val())+parseInt($('#txtgre1_1').val())+parseInt($('#txtgre2_1').val()) )){
+                    esvalido=false;
+                    $("#team1").css("display", "inline");
+                }
+                if(isNaN(parseInt($('#txtjefe_2').val())+parseInt($('#txtgre1_2').val())+parseInt($('#txtgre2_2').val()))){
+                    $("#team2").css("display", "inline");
+                    esvalido=false;$("#team1").css("display", "inline");
+                }
+               
+            
+            
+                if(parseInt($('#txtjefe_1').val())+parseInt($('#txtgre1_1').val())+parseInt($('#txtgre2_1').val())>1000){
+                    $("#team1").css("display", "inline");
+                    esvalido= false;
+                }
+                if(parseInt($('#txtjefe_2').val())+parseInt($('#txtgre1_2').val())+parseInt($('#txtgre2_2').val())>1000){
+                    $("#team2").css("display", "inline");
+                    esvalido =false;
+                } 
+                return esvalido;
+            }
+          
+            function mueveBicis(){
+                /*
+                 *1200px=100%
+                 *1200px=10 000m
+                 *bici:48px  40mm  4%
+                 *1m=0.12px
+                 *1m=0.01%
+                 **/
+               
+                for(var a in VelocidadesGuardados){
+                  
+                    var aleatorio = Math.floor((Math.random()*VelocidadesGuardados[a].vel)+1);
+                    var metros = aleatorio;
+                    aleatorio=aleatorio *0.01;//paso los metros a %
+                    VelocidadesGuardados[a].tamany+=aleatorio;//Actualizo en la array general la  posicion actual
+                   
+                    ActualizaPosicion(a);  //Actualiza en el storage la posicion actual
+                    
+                    $( "#"+VelocidadesGuardados[a].id ).animate({ "left": "+="+(aleatorio)+"%" }, "fast" );
+                    document.getElementById("p"+VelocidadesGuardados[a].id).innerHTML=metros + "m ";//Los metros que ha echo en la tirada nueva
+                    if(VelocidadesGuardados[a].tamany>=100){//Ha ganado
+                        //alert('Has ganao');
+                        eliminarAll();
+                        document.getElementById('pasaturno').disabled = true;
+                        cargaResultados();
+                        $("#resultados").css("display", "block");
+                        break;
+                    }
+                    /*  else{
+                        console.log(VelocidadesGuardados[a].tamany +"%suma + "+parseFloat(VelocidadesGuardados[a].tamany)+aleatorio);
+                    }*/
+                        
+                }
+                  //document.getElementById('pasaturno').disabled = false;;
+            }
+            
+            
+            
+          
+            
+            function cargaPartida(){
+                VelocidadesGuardados=  [//Inicializo la array
+                    {"id": 11, "vel": $('#txtjefe_1').val(), "tamany": tamanybici},
+                    {"id": 12, "vel": $('#txtgre1_1').val(), "tamany": tamanybici},
+                    {"id": 13, "vel": $('#txtgre2_1').val(), "tamany": tamanybici},
+                    {"id": 21, "vel": $('#txtjefe_2').val(), "tamany": tamanybici},
+                    {"id": 22, "vel": $('#txtgre1_2').val(), "tamany": tamanybici},
+                    {"id": 23, "vel": $('#txtgre2_2').val(), "tamany": tamanybici},        
+                ]  
+                var transaction =  db.transaction(["MetrosMaximosPorTurno"]);
+                var store = transaction.objectStore("MetrosMaximosPorTurno");
+
+                // Get everything in the store; Un cursor que recorra todos los datos
+                var keyRange = IDBKeyRange.lowerBound(0);
+                var cursorRequest = store.openCursor(keyRange);
+                 
+                cursorRequest.onsuccess = function(e) {
+                    var result = e.target.result;
+                    if(!!result == false)
+                        return;
+
+                    // El switch elige en cada caso le dara el valor real(del storage) a la array 
+                    //Enviara la bici a esa posicion
+                    //Suma el tamaó de la bici para que gane cuando cruce
+                    switch( result.value.id){
+                    
+                        case 11:
+                            VelocidadesGuardados[0].tamany=result.value.tamany;                            
+                            VelocidadesGuardados[0].vel=result.value.vel;             
+                            $( "#"+VelocidadesGuardados[0].id ).animate({ "left": "+="+(VelocidadesGuardados[0].tamany)+"%" }, "slow" );
+                            VelocidadesGuardados[0].tamany +=tamanybici;
+                            break;
+                        case 12:
+                            VelocidadesGuardados[1].tamany=result.value.tamany;                             
+                            VelocidadesGuardados[1].vel=result.value.vel;
+                            $( "#"+VelocidadesGuardados[1].id ).animate({ "left": "+="+(VelocidadesGuardados[1].tamany)+"%" }, "slow" );
+                            VelocidadesGuardados[1].tamany +=tamanybici;
+                            break;
+                        case 13:
+                            VelocidadesGuardados[2].tamany=result.value.tamany;  
+                            VelocidadesGuardados[2].vel=result.value.vel;
+                            $( "#"+VelocidadesGuardados[2].id ).animate({ "left": "+="+(VelocidadesGuardados[2].tamany)+"%" }, "slow" );
+                            VelocidadesGuardados[2].tamany +=tamanybici;                
+                            break;
+                        case 21:
+                            VelocidadesGuardados[3].tamany=result.value.tamany;                              
+                            VelocidadesGuardados[3].vel=result.value.vel;
+                            $( "#"+VelocidadesGuardados[3].id ).animate({ "left": "+="+(VelocidadesGuardados[3].tamany)+"%" }, "slow" );
+                            VelocidadesGuardados[3].tamany +=tamanybici;               
+                            break;
+                        case 22:
+                            VelocidadesGuardados[4].tamany=result.value.tamany;  
+                            VelocidadesGuardados[4].vel=result.value.vel;
+                            $( "#"+VelocidadesGuardados[4].id ).animate({ "left": "+="+(VelocidadesGuardados[4].tamany)+"%" }, "slow" );
+                            VelocidadesGuardados[4].tamany +=tamanybici;              
+                            break;
+                        case 23:
+                            VelocidadesGuardados[5].tamany=result.value.tamany;      
+                            VelocidadesGuardados[5].vel=result.value.vel;
+                            $( "#"+VelocidadesGuardados[5].id ).animate({ "left": "+="+(VelocidadesGuardados[5].tamany)+"%" }, "slow" );
+                            VelocidadesGuardados[5].tamany +=tamanybici;           
+                            break;
+                    }
+                    
+                    result.continue();
+                };
+                
+
+                cursorRequest.onerror = console.log('error');
+               
+                //  document.getElementById("p"+VelocidadesGuardados[a].id).innerHTML=metros + "m ";
+               
+               
+                
+                $("#datos").css("display", "none");
+                $("#carrera").css("display", "inline-block");
+            }
+             
+            function NuevaPartida(){
+                limpiartxt();
+                eliminarAll();
+                resetearAnimate();
+               $("#resultados").empty();
+                $("#datos").css("display", "inline-block");
+                $("#carrera").css("display", "none");
+                $(".lblerror").css("display", "none");
+                $("#resultados").css("display", "block");
+                 document.getElementById('pasaturno').disabled = false;
+            }
+            function resetearAnimate(){
+                for(var i=0;i<6;i++){
+                    $( "#"+VelocidadesGuardados[i].id ).css('left','0px');
+                }
+            }
+        
+            function limpiartxt(){
+                $('#txtjefe_1').val('');
+                $('#txtgre1_1').val('');
+                $('#txtgre2_1').val('');
+                $('#txtjefe_2').val('');
+                $('#txtgre1_2').val('');
+                $('#txtgre2_2').val('');
+            }   
+            
+            function cargaResultados(){
+                var arrayOrden = VelocidadesGuardados;
+                arrayOrden.sort(SortbyPos);
+                var corredor="";
+                var jugador="";
+                var newtabla="";
+                var newfila="";
+                newtabla=' <table class="table table-striped" id="tresults">';
+                newtabla += ' <thead><tr><th>Clasificación</th><th>Corredor</th><th>';
+                newtabla+='Equipo </th></tr></thead><tbody>';
+                
+                for(var i=0;i<6;i++){
+                   // console.log("esto es jakass "+arrayOrden[i].id)
+                    switch(parseInt(arrayOrden[i].id)){
+                    
+                        case 11:
+                            corredor="jefe de filas";
+                            jugador="jugador 1";
+                            break;
+                        case 12:
+                            corredor="Gregario 1";
+                            jugador="jugador1";
+                            break;
+                        case 13:
+                            corredor="Gregario 2";
+                            jugador="jugador1";
+                            break;
+                        case 21:
+                            corredor="jefe de filas";
+                            jugador="jugador2";
+                            break;
+                        case 22:
+                            corredor="Gregario 1";
+                            jugador="jugador2";
+                            break;
+                        case 23:
+                            corredor="Gregario 2";
+                            jugador="jugador2";
+                            break;
+                    }
+                
+                    newfila += "<tr> <td> "+"Nº"+ i +"</td><td>"+corredor+"</td><td>"+jugador+"</td></tr>";
+                }
+                newtabla+=newfila+'</tbody></table>';
+                $("#resultados").append(newtabla);
+            }
+            //This will sort your array
+            function SortbyPos(a, b){
+                var aPos = parseFloat(a.tamany);
+                var bPos = parseFloat(b.tamany); 
+                return ((aPos > bPos) ? -1 : ((aPos < bPos) ? 1 : 0));
+            }
+
+        </script>
+        <style>
+            img{
+                width: 150px;
+                height: 100px;
+            }
+            .form-group{
+                text-align: center;
+            }
+            .form-inline{
+                margin-bottom: 20px;
+
+                border: 5px solid gainsboro;
+                margin-bottom: 5px;
+                padding: 5px;
+            }
+            #todo{
+
+            }
+            #datos{
+                width: 75%;
+                margin: auto;
+                text-align: center;
+            }
+            *{
+
+            }
+            body{
+                /*  background-image: url(images/fondo.jpeg);*/
+                background-color: burlywood;
+                text-align: center;
+
+            }
+            .hJug{
+                text-align: left;
+                font-size: 18px;
+                font-weight: bold;
+            }
+            #banner
+            {
+                width: 100%;
+                height: auto;
+            }
+            #carrera{
+                display: none;
+                margin-left: 3%;  
+                width: 1200px;
+
+            }
+            .row{
+                text-align: left;
+                width: auto;
+                border: 1px solid blue;
+            }
+            #carriles{
+                text-align: left;
+                width: auto;
+                border: 1px solid black;
+            }
+            .animebici>img{
+                height: 30px;;
+                width: 48px;
+            }
+            .animebici{
+                position: relative;
+                width: 50px;
+                height: auto;
+                /*border: 1px solid red;*/
+            }
+
+            .carril{
+                background-color: #777;
+                border-bottom: dashed 2px white;
+                width: 1200px;
+            }
+            .pVelo {
+                color:white;
+            }
+            .lblerror
+            {
+                display: none;
+                color: red;
+                size: 8px;
+                text-align: right;
+            }
+
+            #resultados{
+                display: none;
+                margin-bottom: 25px;
+
+            }
+            #tresults{
+                border: solid black 3px;
+            }
+
+
+
+
+
+        </style>
+    </head>
+    <body>
+        <div id="todo">
+            <div id="divbanner">
+                <img id="banner" src="images/bannerLVBcorre.jpg"  class="img-rounded">
+            </div>
+            <h1 style="text-align: center">Carrera ciclista</h1>
+            <div id="datos">
+                <p class="lead" style="text-align: left">Elige la estrategia de tu equipo:</p>
+                <form class="form-inline" role="form" style="text-align: left" >
+                    <span class="hJug">Jugador 1</span><span id="team1" class="lblerror">&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se ha de escribir números y no pueden sumar más de 1000</span>
+                    <br>
+                    <div style="text-align: center">
+                        <div class="form-group" >
+                            <strong>Jefe de Filas</strong><br>
+                            <img src="images/ci1.png" alt="Jefe de filas" class="img-rounded">
+                            <input type="text" size="13" class="form-control" id="txtjefe_1" placeholder="Velocidad Máxima (Metros por turno)">
+                        </div>
+                        <div class="form-group">
+                            <strong>Gregorio 1</strong><br>
+                            <img src="images/ci2.png" alt="Gregorio 1" class="img-rounded">
+                            <input type="text" size="13"  class="form-control" id="txtgre1_1" placeholder="Velocidad Máxima (Metros por turno)">
+                        </div>
+                        <div class="form-group">
+                            <strong>Gregorio 2</strong><br>
+                            <img src="images/ci3.png" alt="Gregorio 2" class="img-rounded">
+                            <input type="text" size="13"  class="form-control" id="txtgre2_1" placeholder="Velocidad Máxima (Metros por turno)">
+                        </div>
+                    </div>
+                </form>
+                <form class="form-inline" role="form" style="text-align: left" >
+                    <span class="hJug">Jugador 2</span><span id="team2" class="lblerror">&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se ha de escribir números y no pueden sumar más de 1000</span>
+                    <br>
+                    <div style="text-align: center">
+                        <div class="form-group" >
+                            <strong>Jefe de Filas</strong><br>
+                            <img src="images/ci1.png" alt="Jefe de filas" class="img-rounded">
+                            <input type="text" size="13" class="form-control" id="txtjefe_2" placeholder="Velocidad Máxima (Metros por turno)">
+                        </div>
+                        <div class="form-group">
+                            <strong>Gregorio 1</strong><br>
+                            <img src="images/ci2.png" alt="Gregorio 1" class="img-rounded">
+                            <input type="text" size="13"  class="form-control" id="txtgre1_2" placeholder="Velocidad Máxima (Metros por turno)">
+                        </div>
+                        <div class="form-group">
+                            <strong>Gregorio 2</strong><br>
+                            <img src="images/ci3.png" alt="Gregorio 2" class="img-rounded">
+                            <input type="text" size="13"  class="form-control" id="txtgre2_2" placeholder="Velocidad Máxima (Metros por turno)">
+
+                        </div>
+                    </div>
+                </form>     
+                <button type="button" onclick="empezar()" class="btn btn-primary">Start!</button>
+
+            </div>
+            <div id="carrera">
+                <div id="resultados">
+                    <!--  <table class="table table-striped" id="tresults">
+                          <thead>
+                              <tr>
+                                  <th>
+                                      Clasificación
+                                  </th>
+                                  <th>
+                                      Corredor
+                                  </th>
+                                  <th>
+                                      Equipo
+                                  </th>
+  
+                              </tr>
+                          </thead>
+                          <tbody>
+  
+                          </tbody>
+  
+                      </table>-->
+
+                </div>   
+
+
+                <div id="carriles">
+                    <div class="carril">
+                        <div class="animebici" id="11">
+                            <img class="biciCarera" src="images/ci1.png" alt="Jefe de filas" ><p class="pVelo" id="p11"> 0</p>
+                        </div>
+                    </div>
+                    <div class="carril">
+                        <div class="animebici" id="12">
+                            <img  class="biciCarera" src="images/ci2.png" alt="Gregorio 1" ><p class="pVelo"  id="p12"> 0</p>
+                        </div>
+                    </div>
+                    <div class="carril" style="border-bottom:solid white 4px">
+                        <div class="animebici" id="13">
+                            <img class="biciCarera"  src="images/ci3.png" alt="Gregorio 2"><p class="pVelo"  id="p13"> 0</p>
+                        </div> 
+                    </div>
+                    <div class="carril" style="border-bottom: solid white 4px;border-top: solid white 4px;">
+
+                    </div>
+                    <div class="carril">
+                        <div class="animebici" id="21">
+                            <img class="biciCarera" src="images/ci1.png" alt="Jefe de filas" ><p  class="pVelo" id="p21"> 0</p>
+                        </div>
+                    </div>
+
+                    <div class="carril">
+                        <div class="animebici" id="22">
+                            <img class="biciCarera"  src="images/ci2.png" alt="Gregorio 1" ><p class="pVelo"  id="p22"> 0</p>
+                        </div>
+                    </div>
+                    <div class="carril" style="border-bottom:1px solid">
+                        <div class="animebici" id="23">
+                            <img  class="biciCarera" src="images/ci3.png" alt="Gregorio 2" ><p class="pVelo"  id="p23"> 0</p>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="PasarTurno()" id="pasaturno" class="btn btn-primary">Pasar Turno!</button>
+                <button type="button" onclick="NuevaPartida()" class="btn btn-primary">Nueva Partida</button>
+
+            </div>
+
+
+
+        </div>
+
+
+    </body>
+</html>
