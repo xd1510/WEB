@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title></title>
+        <script>
+            
+            //prefixes of implementation that we want to test
+            window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+ 
+            //prefixes of window.IDB objects
+            window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+            window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange
+ 
+            if (!window.indexedDB) {
+                window.alert("Your browser doesn't support a stable version of IndexedDB.")
+            }
+            
+            
+            //ABRE BASE DE DATOS
+            var db;
+            var request = window.indexedDB.open("Storage", 1);
+ 
+            request.onerror = function(event) {
+                console.log("error: ");
+            };
+ 
+            request.onsuccess = function(event) {
+                db = request.result;
+                console.log("success: "+ db);
+                comprueba(db);
+            };
+ 
+            
+            
+            //CREA UN OBJECT STORE E INSERTA
+            request.onupgradeneeded = function(event) {
+            
+                var db = event.target.result;
+                var objectStore = db.createObjectStore("datosExamen2", {keyPath: "id"});
+                
+            }
+        </script>
+    </head>
+    <body>
+        <input type="text" size="13" id="txt">
+        <button type="button" onclick="comprueba()">Click Me!</button>
+
+        <script>
+            var esplit;
+            var num = 0;
+            var txt ;
+            var arrai = new Array ;
+           arrai= [{"id":156156156181561,"num": 0}];
+            /*alert(arrai[0].num.toString());*/
+                    
+            var arraiIndex = new Array;
+            function escriuLog(callback){
+                //  console.log(callback);
+                // setInterval(function(){num = num+parseInt(esplit[1]);},1000)
+                callback();
+                
+            }
+            function comprueba(){
+               
+            
+                txt  = document.getElementById("txt").value;
+              
+                esplit = txt.split('-');
+                if(esplit.length==2){
+                    if(esplit[0] == "INC"){
+                        // escriuLog("fds");
+                        escriuLog(setInterval(function(){num = num+parseInt(esplit[1]);console.log(num);
+                            guardaArray();
+                        },1000));
+                    }
+                    else if(esplit[0]=="ALT"){
+                        var x=Math.PI;
+                        escriuLog(setInterval(function(){num = num+parseInt(esplit[1])*x;console.log(num);
+                            guardaArray();
+                        },1000));
+                    }
+                }
+                else if(esplit.length==3){
+                    if(esplit[0] == "RND"){
+                        var rango_superior = parseInt(esplit[2]);                            
+                        var rango_inferior = parseInt(esplit[1]);
+                        // console.log("nums : " + esplit[2]+" -- " + esplit[1]);
+                                                 
+                        
+                        escriuLog(setInterval(function(){num = Math.floor(Math.random()*(rango_superior-(rango_inferior-1))) + rango_inferior;console.log(num);
+                            guardaArray();
+                        },1000));
+                        
+                       
+                    } 
+                }
+            }
+            
+            function guardaArray(){
+                arrai.push({"id":arrai.length,"num": num});
+                // arrai[arrai.length]["num"]=num;
+               // console.log(arrai.length +"   -  holaaaa1111 -  " + arrai[arrai.length -1 ]);
+               // console.log("holaaaa222  -  " + arrai[arrai.length -1].num);
+                //arraiIndex
+                
+                var request = db.transaction(["datosExamen2"], "readwrite")
+                .objectStore("datosExamen2")
+                .add(arrai[arrai.length -1]);
+                     
+               
+                                 
+                request.onsuccess = function(event) {
+                    //console.log("actualizado id:BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                    //console.log("actualizado id: "+VelocidadesGuardados[a].id + " - posicion: " + zzz);
+                };
+         
+                request.onerror = function(event) {
+                    //    alert("Unable to add data\r\nKenny is aready exist in your database! ");  
+                //    console.log("no va yeahhAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!");
+                }
+            }
+           
+                
+        
+        </script>
+    </body>
+</html>
